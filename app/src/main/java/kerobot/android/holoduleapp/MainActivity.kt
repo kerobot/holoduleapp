@@ -8,13 +8,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.Window
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import kerobot.android.holoduleapp.api.IApiService
+import kerobot.android.holoduleapp.api.create
 import kerobot.android.holoduleapp.model.Auth
 import kerobot.android.holoduleapp.model.Holodule
 import kotlinx.coroutines.CoroutineScope
@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var searchString: String
     private lateinit var service: IApiService
     private lateinit var auth: Auth
+    private lateinit var holoduleList: ArrayList<Holodule>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         // 初期化
         selectedDate = LocalDate.now()
         searchString = ""
+        holoduleList = ArrayList()
         // 設定読込
         val appInfo = packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
         val baseUrl = appInfo.metaData.getString("API_URL")
@@ -57,6 +59,15 @@ class MainActivity : AppCompatActivity() {
         val lvList = findViewById<ListView>(R.id.lvList)
         val listItemClickListener = ListItemClickListener()
         lvList.onItemClickListener = listItemClickListener
+        val listAdapter = ListAdapter(applicationContext, holoduleList)
+        lvList.adapter = listAdapter
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("MainActivity", "onStart state:" + lifecycle.currentState)
+        // ホロジュールの取得
+        searchHolodule()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -80,6 +91,8 @@ class MainActivity : AppCompatActivity() {
         searchString = savedInstanceState.getString("search", "")
         val btSearch = findViewById<Button>(R.id.btSearch)
         btSearch.text = searchString
+        // ホロジュールの取得
+        searchHolodule()
     }
 
     private inner class DateListener : View.OnClickListener {
@@ -91,6 +104,8 @@ class MainActivity : AppCompatActivity() {
                     selectedDate = LocalDate.of(year, month + 1, dayOfMonth)
                     val btDate = findViewById<Button>(R.id.btDate)
                     btDate.text = selectedDate.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
+                    // ホロジュールの取得
+                    searchHolodule()
                 },
                 selectedDate.year,
                 selectedDate.monthValue - 1,
@@ -124,34 +139,41 @@ class MainActivity : AppCompatActivity() {
 
     private inner class SearchListener : View.OnClickListener {
         override fun onClick(view: View) {
-            // 日付と検索文字列を利用したホロジュールの取得
-            searchString = findViewById<EditText>(R.id.etSearch).text.toString()
-            searchHolodule(selectedDate, searchString)
+            // ホロジュールの取得
+            searchHolodule()
         }
     }
 
-    private fun searchHolodule(date: LocalDate, search: String) {
+    private fun searchHolodule() {
+        // 検索文字列
+        searchString = findViewById<EditText>(R.id.etSearch).text.toString()
+        // リストアダプタ
+        val listAdapter = findViewById<ListView>(R.id.lvList).adapter as ListAdapter
+        // リストのクリア
+        holoduleList.clear()
+        // コルーチンで API アクセス
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 // トークンの取得
                 val token = service.createToken(auth)
                 // データの取得
                 val jwtToken = "JWT " + token.access_token.toString()
-                val dateString = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
+                val dateString = selectedDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
                 val result = service.getHolodules(jwtToken, dateString)
                 // データの絞り込み
-                val filteredList = result.holodules?.filter { x -> x.title?.contains(search) ?: false ||
-                        x.description?.contains(search) ?: false
+                val filteredList = result.holodules?.filter {
+                    x -> x.title?.contains(searchString) ?: false || x.description?.contains(searchString) ?: false
                 }
-                // データの表示
+                // リストの追加
                 if (filteredList != null && filteredList.any()) {
-                    val listView = findViewById<ListView>(R.id.lvList)
-                    val listAdapter = ListAdapter(applicationContext, ArrayList(filteredList))
-                    listView.adapter = listAdapter
+                    holoduleList.addAll(filteredList)
                 }
             }
             catch (e: Exception) {
                 Log.d("Search", e.toString())
+            }
+            finally {
+                listAdapter.notifyDataSetChanged()
             }
         }
     }

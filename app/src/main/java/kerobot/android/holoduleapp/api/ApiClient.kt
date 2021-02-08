@@ -1,4 +1,4 @@
-package kerobot.android.holoduleapp
+package kerobot.android.holoduleapp.api
 
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 val httpBuilder: OkHttpClient.Builder get() {
-    // create http client
+    // HTTP client の作成
     val timeout:Long = 30
     val httpClient = OkHttpClient.Builder().addInterceptor(Interceptor { chain ->
         val original = chain.request()
@@ -19,7 +19,7 @@ val httpBuilder: OkHttpClient.Builder get() {
                 .build()
         return@Interceptor chain.proceed(request)
     }).readTimeout(timeout, TimeUnit.SECONDS)
-    // log
+    // ログの設定
     val loggingInterceptor = HttpLoggingInterceptor()
     loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
     httpClient.addInterceptor(loggingInterceptor)
@@ -27,15 +27,15 @@ val httpBuilder: OkHttpClient.Builder get() {
 }
 
 fun <S> create(serviceClass: Class<S>, baseUrl: String): S {
-    // gson
+    // gson の作成
     val gson = GsonBuilder().serializeNulls().create()
-    // create retrofit
+    // retrofit の作成
     val retrofit = Retrofit.Builder()
             // 基本 URL の指定
             .baseUrl(baseUrl)
             // コンバーターとして Gson を利用
             .addConverterFactory(GsonConverterFactory.create(gson))
-            // カスタマイズした okhttp の指定
+            // カスタマイズした HTTP client を指定
             .client(httpBuilder.build())
             // リクエストの組み立て
             .build()

@@ -15,7 +15,7 @@ import kerobot.android.holoduleapp.model.Holodule
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ListAdapter (val context: Context, val holodules: ArrayList<Holodule>) : BaseAdapter() {
+class ListAdapter (private val context: Context, private val holodules: ArrayList<Holodule>) : BaseAdapter() {
 
     private val faceMap = mapOf(
         "ときのそら" to R.drawable.tokino_sora,
