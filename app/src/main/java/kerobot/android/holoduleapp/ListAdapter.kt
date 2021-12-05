@@ -50,6 +50,11 @@ class ListAdapter (private val context: Context, private val holodules: ArrayLis
         "尾丸ポルカ" to R.drawable.omaru_polka,
         "桃鈴ねね" to R.drawable.momosuzu_nene,
         "魔乃アロエ" to R.drawable.mano_aloe,
+        "ラプラス" to R.drawable.laplus_darknesss,
+        "鷹嶺ルイ" to R.drawable.takane_lui,
+        "博衣こより" to R.drawable.hakui_koyori,
+        "沙花叉クロヱ" to R.drawable.sakamata_chloe,
+        "風真いろは" to R.drawable.kazama_iroha
     )
 
     @SuppressLint("ViewHolder", "InflateParams", "SimpleDateFormat")
