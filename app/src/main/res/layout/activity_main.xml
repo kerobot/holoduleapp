@@ -30,6 +30,7 @@
             android:ems="10"
             android:hint="@string/et_search"
             android:inputType="textPersonName"
+            android:textColorHint="#546E7A"
             app:layout_constraintEnd_toStartOf="@+id/btSearch"
             app:layout_constraintStart_toEndOf="@+id/btDate"
             app:layout_constraintTop_toTopOf="parent" />
@@ -38,6 +39,7 @@
             android:id="@+id/btSearch"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/desc_search"
             app:icon="@drawable/ic_baseline_search_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

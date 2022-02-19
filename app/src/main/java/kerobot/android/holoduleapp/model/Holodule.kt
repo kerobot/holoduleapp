@@ -1,6 +1,7 @@
 package kerobot.android.holoduleapp.model
 
 data class Holodule(val key: String?,
+                    val code: String?,
                     val video_id: String?,
                     val datetime: String?,
                     val name: String?,

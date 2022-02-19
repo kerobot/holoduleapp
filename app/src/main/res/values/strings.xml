@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">Holodule App</string>
     <string name="bt_date">日付</string>
-    <string name="et_search">検索</string>
+    <string name="et_search">名前や単語</string>
     <string name="bt_search">検索</string>
+    <string name="desc_search">検索</string>
     <string name="iv_description">顔</string>
     <string name="youtube_vnd">vnd.youtube:</string>
     <string name="youtube_url">https://www.youtube.com/watch?v=</string>

@@ -18,10 +18,12 @@ import kotlin.collections.ArrayList
 class ListAdapter (private val context: Context, private val holodules: ArrayList<Holodule>) : BaseAdapter() {
 
     private val faceMap = mapOf(
+        "ホロライブ" to R.drawable.hololive,
         "ときのそら" to R.drawable.tokino_sora,
         "ロボ子さん" to R.drawable.robokosan,
         "さくらみこ" to R.drawable.sakura_miko,
         "星街すいせい" to R.drawable.hoshimachi_suisei,
+        "AZKi" to R.drawable.azki,
         "夜空メル" to R.drawable.yozora_mel,
         "アキ・ローゼンタール" to R.drawable.aki_rosenthal,
         "赤井はあと" to R.drawable.haachama,
