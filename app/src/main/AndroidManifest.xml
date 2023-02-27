@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="kerobot.android.holoduleapp">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -20,7 +19,7 @@
             </intent-filter>
         </activity>
 
-        <meta-data android:name="API_URL" android:value="${API_URL}" />
+        <meta-data android:name="API_ENDPOINT" android:value="${API_ENDPOINT}" />
         <meta-data android:name="API_USERNAME" android:value="${API_USERNAME}" />
         <meta-data android:name="API_PASSWORD" android:value="${API_PASSWORD}" />
     </application>

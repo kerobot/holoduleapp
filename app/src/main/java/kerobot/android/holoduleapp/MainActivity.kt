@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         holoduleList = ArrayList()
         // 設定読込
         val appInfo = packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
-        val baseUrl = appInfo.metaData.getString("API_URL")
+        val baseUrl = appInfo.metaData.getString("API_ENDPOINT")
         val userName = appInfo.metaData.getString("API_USERNAME")
         val password = appInfo.metaData.getString("API_PASSWORD")
         service = create(IApiService::class.java, baseUrl!!)
@@ -157,11 +157,11 @@ class MainActivity : AppCompatActivity() {
                 // トークンの取得
                 val token = service.createToken(auth)
                 // データの取得
-                val jwtToken = "JWT " + token.access_token.toString()
+                val jwtToken = "Bearer " + token.access_token.toString()
                 val dateString = selectedDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
-                val result = service.getHolodules(jwtToken, dateString)
+                val list = service.getHolodules(jwtToken, dateString)
                 // データの絞り込み
-                val filteredList = result.holodules?.filter {
+                val filteredList = list.filter {
                     x -> x.title?.contains(searchString) ?: false || x.description?.contains(searchString) ?: false
                 }
                 // リストの追加

@@ -16,7 +16,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        manifestPlaceholders = [API_URL: System.getenv("API_URL"),
+        manifestPlaceholders = [API_ENDPOINT: System.getenv("API_ENDPOINT"),
                                 API_USERNAME: System.getenv("API_USERNAME"),
                                 API_PASSWORD: System.getenv("API_PASSWORD")]
     }
@@ -34,6 +34,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    namespace 'kerobot.android.holoduleapp'
 }
 
 dependencies {
