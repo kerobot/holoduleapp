@@ -165,7 +165,7 @@ class MainActivity : AppCompatActivity() {
                     x -> x.title?.contains(searchString) ?: false || x.description?.contains(searchString) ?: false
                 }
                 // リストの追加
-                if (filteredList != null && filteredList.any()) {
+                if (filteredList.any()) {
                     holoduleList.addAll(filteredList)
                 }
             }
